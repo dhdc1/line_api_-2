@@ -171,6 +171,19 @@ def callback():
     return 'OK'
 
 
+@handler.add(FollowEvent)
+def handle_follow(event):
+    profile = get_user_profile(event)
+    line_bot_api.reply_message(
+        event.reply_token, TextSendMessage(text='Hello nice to meet you ' + profile.display_name + '.'))
+
+
+@handler.add(UnfollowEvent)
+def handle_unfollow(event):
+    app.logger.info("Got Unfollow event")
+    print(event.source.user_id + " is unfollow.")
+
+
 @handler.add(MessageEvent, message=TextMessage)
 def handle_text_message(event):
     text = event.message.text
@@ -208,6 +221,16 @@ def handle_text_message(event):
         ])
 
 
+@handler.add(MessageEvent, message=StickerMessage)
+def handle_sticker_message(event):
+    line_bot_api.reply_message(
+        event.reply_token,
+        StickerSendMessage(
+            package_id=event.message.package_id,
+            sticker_id=event.message.sticker_id)
+    )
+
+
 @handler.add(MessageEvent, message=LocationMessage)
 def handle_location_message(event):
     line_bot_api.reply_message(
@@ -219,17 +242,6 @@ def handle_location_message(event):
     )
 
 
-@handler.add(MessageEvent, message=StickerMessage)
-def handle_sticker_message(event):
-    line_bot_api.reply_message(
-        event.reply_token,
-        StickerSendMessage(
-            package_id=event.message.package_id,
-            sticker_id=event.message.sticker_id)
-    )
-
-
-# Other Message Type
 @handler.add(MessageEvent, message=(ImageMessage, VideoMessage, AudioMessage))
 def handle_content_message(event):
     if isinstance(event.message, ImageMessage):
@@ -277,19 +289,6 @@ def handle_file_message(event):
             TextSendMessage(text='Save file.'),
             TextSendMessage(text=request.host_url + '/static/tmp/' + dist_name)
         ])
-
-
-@handler.add(FollowEvent)
-def handle_follow(event):
-    print(event.source.user_id + " is follow.")
-    line_bot_api.reply_message(
-        event.reply_token, TextSendMessage(text='Hello nice to meet you.'))
-
-
-@handler.add(UnfollowEvent)
-def handle_unfollow(event):
-    app.logger.info("Got Unfollow event")
-    print(event.source.user_id + " is unfollow.")
 
 
 @handler.add(JoinEvent)
