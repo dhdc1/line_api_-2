@@ -59,10 +59,10 @@ channel_secret = "d2d9f8b67a4837db81ced2cb47651a4f"
 channel_access_token = "ya/3TTMl4IK706X8nqW3A+6qXzRwWwet0LJdplhFtncpNC04cuUL3t25wGPdM9qsggUyQ0Y+H0xu+IpvVCDs2cMm15/A0rPTkiYDwH0vxXpoVnxbImierkix9zeybtxdSgbS4jZEpBCs2ZVLTCPhhwdB04t89/1O/w1cDnyilFU="
 
 if channel_secret is None:
-    print('Specify LINE_CHANNEL_SECRET as environment variable.')
+    print('LINE_CHANNEL_SECRET is None.')
     sys.exit(1)
 if channel_access_token is None:
-    print('Specify LINE_CHANNEL_ACCESS_TOKEN as environment variable.')
+    print('LINE_CHANNEL_ACCESS_TOKEN is None')
     sys.exit(1)
 
 line_bot_api = LineBotApi(channel_access_token)
@@ -147,7 +147,10 @@ def push():
     return 'OK'
 
 
-# webhook-routing
+# end-routing
+
+
+# webhook
 @app.route("/callback", methods=['POST'])
 def callback():
     # get X-Line-Signature header value
@@ -173,73 +176,27 @@ def callback():
 
 @handler.add(FollowEvent)
 def handle_follow(event):
-    profile = get_user_profile(event)
-    line_bot_api.reply_message(
-        event.reply_token, TextSendMessage(text='Hello nice to meet you ' + profile.display_name + '.'))
+    print(event)
 
 
 @handler.add(UnfollowEvent)
 def handle_unfollow(event):
-    app.logger.info("Got Unfollow event")
-    print(event.source.user_id + " is unfollow.")
+    print(event)
 
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_text_message(event):
-    text = event.message.text
-    if text == 'test':
-        line_bot_api.reply_message(event.reply_token, [
-            TextSendMessage(text=event.message.text),
-            StickerSendMessage(package_id=1, sticker_id=101),
-            TextSendMessage(text='ก็โอนะ....'),
-
-        ])
-    if text == 'json':
-        line_message_reply(event, [
-            {
-                "type": "template",
-                "altText": "ข้อความ JSON",
-                "template": {
-                    "type": "buttons",
-                    "actions": [
-                        {
-                            "type": "datetimepicker",
-                            "label": "วันที่",
-                            "data": "date_go",
-                            "mode": "date",
-                        },
-                        {
-                            "type": "uri",
-                            "label": "Go",
-                            "uri": "http://google.com"
-                        }
-                    ],
-                    "title": "สวัสดี",
-                    "text": "ฉันเกิดจาก JSON"
-                }
-            }
-        ])
+    print(event)
 
 
 @handler.add(MessageEvent, message=StickerMessage)
 def handle_sticker_message(event):
-    line_bot_api.reply_message(
-        event.reply_token,
-        StickerSendMessage(
-            package_id=event.message.package_id,
-            sticker_id=event.message.sticker_id)
-    )
+    print(event)
 
 
 @handler.add(MessageEvent, message=LocationMessage)
 def handle_location_message(event):
-    line_bot_api.reply_message(
-        event.reply_token,
-        LocationSendMessage(
-            title=event.message.title, address=event.message.address,
-            latitude=event.message.latitude, longitude=event.message.longitude
-        )
-    )
+    print(event)
 
 
 @handler.add(MessageEvent, message=(ImageMessage, VideoMessage, AudioMessage))
@@ -264,12 +221,7 @@ def handle_content_message(event):
     os.rename(tempfile_path, dist_path)
 
     url = request.url_root + 'static/tmp/' + dist_name
-    line_bot_api.reply_message(
-        event.reply_token, [
-            TextSendMessage(text='Save content.'),
-            TextSendMessage(text=request.host_url + '/static/tmp/' + dist_name),
-            ImageSendMessage(url, url)
-        ])
+    print(url)
 
 
 @handler.add(MessageEvent, message=FileMessage)
@@ -283,44 +235,28 @@ def handle_file_message(event):
     dist_path = tempfile_path + '-' + event.message.file_name
     dist_name = os.path.basename(dist_path)
     os.rename(tempfile_path, dist_path)
-
-    line_bot_api.reply_message(
-        event.reply_token, [
-            TextSendMessage(text='Save file.'),
-            TextSendMessage(text=request.host_url + '/static/tmp/' + dist_name)
-        ])
+    url = request.host_url + '/static/tmp/' + dist_name
+    print(url)
 
 
 @handler.add(JoinEvent)
 def handle_join(event):
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text='Joined this ' + event.source.type))
+    print(event)
 
 
 @handler.add(LeaveEvent)
-def handle_leave():
-    app.logger.info("Got leave event.")
+def handle_leave(event):
+    print(event)
 
 
 @handler.add(PostbackEvent)
 def handle_postback(event):
-    if event.postback.data == 'ping':
-        line_bot_api.reply_message(
-            event.reply_token, TextSendMessage(text='ฉันได้รับข้อความ ' + event.postback.params['data']))
-
-    if event.postback.data == 'date_go':
-        line_bot_api.reply_message(
-            event.reply_token, TextSendMessage(text='ฉันได้รับข้อความ ' + event.postback.params['date']))
+    print(event)
 
 
 @handler.add(BeaconEvent)
 def handle_beacon(event):
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(
-            text='Got beacon event. hwid={}, device_message(hex string)={}'.format(
-                event.beacon.hwid, event.beacon.dm)))
+    print(event)
 
 
 @app.route('/static/<path:path>')
