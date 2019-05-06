@@ -133,6 +133,7 @@ def regis():
     if request.method == 'POST':
         cid = request.form['cid']
         print(cid)
+        print('xxx')
         return render_template('ok.html')
 
 
