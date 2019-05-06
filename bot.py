@@ -301,7 +301,7 @@ def handle_join(event):
 
 @handler.add(LeaveEvent)
 def handle_leave():
-    app.logger.info("Got leave event")
+    app.logger.info("Got leave event.")
 
 
 @handler.add(PostbackEvent)
