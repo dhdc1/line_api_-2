@@ -177,7 +177,9 @@ def handle_text_message(event):
     if text == 'test':
         line_bot_api.reply_message(event.reply_token, [
             TextSendMessage(text=event.message.text),
-            StickerSendMessage(package_id=1, sticker_id=101)
+            StickerSendMessage(package_id=1, sticker_id=101),
+            TextSendMessage(text='ก็โอนะ....'),
+
         ])
     if text == 'json':
         line_message_reply(event, [
