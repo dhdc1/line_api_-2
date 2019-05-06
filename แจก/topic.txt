@@ -1,0 +1,26 @@
+﻿1) Developer Console และ Acount Manager
+2)ลง python3  และ  เครื่องมือเขียน code ได้แก่ Pycharm
+3)สร้าง webhook ด้วย Flask Service  และทำ  https ด้วย ngrok
+4) เปิดเปิด greeting message , auto response
+5)ตรวจจับผู้ใช้ follow และ unfollow  และดู  user_id
+6)ตรวจจับผู้ใช้ส่ง message 
+7)ทำ Rich Menu
+8)ตอบกลับ 
+ TextSendMessage , LocationSendMessage , FlexSendMessage
+ StickerSendMessage ,TemplateSendMessage ,ImageSendMessage
+9)ทดลองสร้างหน้าจอ LIFF เพื่อให้ user ลงทะเบียน และตอบโต้เมื่อลงทะเบียนสำเร็จ/ไม่สำเร็จ
+10)ตรวจจับ  และ ตอบกลับ
+ - text_message
+ - stricker_message
+ - location_message
+ - content_message (image / video)
+ - postback
+ - beacon (ไม่สอน)
+11)การใช้ Bot Designer
+12)ส่ง push message แบบระบุคน /หลายคน  (เพจเกจฟรีส่งได้ 500 ข้อความต่อเดือน)
+
+
+
+
+
+ 
