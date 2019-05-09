@@ -186,7 +186,12 @@ def regis():
 
 @app.route('/push', methods=['GET'])
 def push():
-    line_message_push(['lineid','dd',''], [
+    users = list()
+    #loop
+    users.append('ssssss')
+    users.append('kkkk')
+    #end loop
+    line_message_push(users, [
         {
             "type": "text",
             "text": "ข้อความเสียโควต้า message "
@@ -339,6 +344,7 @@ def handle_text_message(event):
 @handler.add(MessageEvent, message=StickerMessage)  #มีคนส่งสติกเกอร์
 def handle_sticker_message(event):
     print(event)
+
     line_message_reply(event,[
         {
             "type": "sticker",
@@ -352,6 +358,7 @@ def handle_sticker_message(event):
 @handler.add(MessageEvent, message=LocationMessage) #มีคนส่ง location
 def handle_location_message(event):
     print(event)
+
     lat, lon ,user_id = event.message.latitude, event.message.longitude , event.source.user_id
     profile = get_user_profile(event)
     user_name = profile.display_name
