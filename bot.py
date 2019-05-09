@@ -298,11 +298,11 @@ def handle_sticker_message(event):
 @handler.add(MessageEvent, message=LocationMessage) #มีคนส่ง location
 def handle_location_message(event):
     print(event)
-    lat, lon  = event.message.latitude, event.message.longitude
+    lat, lon ,user_id = event.message.latitude, event.message.longitude , event.source.user_id
     line_message_reply(event,[
         {
             'type':'text',
-            'text': str(lat) +","+  str(lon)
+            'text': user_id+" , "+str(lat) +" , "+  str(lon) 
         }
     ])
     
