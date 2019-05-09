@@ -74,8 +74,16 @@ static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
 # function
 
 def is_member(event):
-    user_id = event.source.user_id    
-    if not user_id  == '00000':       
+
+    user_id = event.source.user_id  
+    db = con_db()
+    cursor = db.cursor()
+
+    sql = " select count(cid)  from line where line_id = '{0}' ".format(line_id)
+    cursor.execute(sql)
+    row = cursor.fetchone()
+
+    if not int(row[0]) > 0:    # ไปดึงจากฐานว่า มี user_id นี้อยู่มั้ย   
         return False
     else :
         return True
@@ -163,8 +171,16 @@ def regis():
         return render_template('regis.html')
     if request.method == 'POST':
         cid = request.form['cid']
-        print(cid)
-        print('xxx')
+        line_id = request.form['line_id']
+
+        db = con_db()
+        cursor = db.cursor()
+
+        sql = " insert into line (cid , line_id) values ('{0}','{1}') ".format(cid,line_id)
+        cursor.execute(sql)
+        db.commit()
+
+
         return render_template('ok.html')
 
 
