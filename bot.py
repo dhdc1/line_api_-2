@@ -75,7 +75,7 @@ static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
 
 def is_member(event):
 
-    user_id = event.source.user_id  
+    line_id = event.source.user_id  
     db = con_db()
     cursor = db.cursor()
 
