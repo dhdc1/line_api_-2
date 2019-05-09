@@ -1,5 +1,5 @@
 ﻿1) Developer Console และ Acount Manager
-2)ลง python3  และ  เครื่องมือเขียน code ได้แก่ Pycharm
+2)ลง python3  และ  เครื่องมือเขียน code ได้แก่ Pycharm , vscode
 3)สร้าง webhook ด้วย Flask Service  และทำ  https ด้วย ngrok
 4) เปิดเปิด greeting message , auto response
 5)ตรวจจับผู้ใช้ follow และ unfollow  และดู  user_id

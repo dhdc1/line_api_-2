@@ -55,8 +55,8 @@ api_reply = "https://api.line.me/v2/bot/message/reply"
 api_push = "https://api.line.me/v2/bot/message/multicast"
 
 # เปลี่ยนเป็นของ chanel ตัวเอง
-channel_secret = "fb0fed31522e4da273fd1856ef6489a9"
-channel_access_token = "IEl91F7L1MnAuHDD3kxAYgF27xXSQJW41LpAoLMf0RjuuXNBjuN5E2uhYRHPyqcUKjRSgdwWconYrYivZLmyk/ECjXV+pNwjgQQoji+ZNs1wtUwwzkz3xMOjqbabRexZUCt2vbadhK7UwZkxBs9R+gdB04t89/1O/w1cDnyilFU="
+channel_secret = "d2d9f8b67a4837db81ced2cb47651a4f"
+channel_access_token = "ya/3TTMl4IK706X8nqW3A+6qXzRwWwet0LJdplhFtncpNC04cuUL3t25wGPdM9qsggUyQ0Y+H0xu+IpvVCDs2cMm15/A0rPTkiYDwH0vxXpoVnxbImierkix9zeybtxdSgbS4jZEpBCs2ZVLTCPhhwdB04t89/1O/w1cDnyilFU="
 
 if channel_secret is None:
     print('LINE_CHANNEL_SECRET is None.')
@@ -69,6 +69,18 @@ line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
 
 static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
+
+
+# test
+
+def test_app():
+    db = con_db()
+    cursor = db.cursor()
+    sql = "select concat(count(vn) ,' ' ,'visit') as cc  from vn_stat where vstdate ='2018-09-03'"
+    cursor.execute(sql)
+    row = cursor.fetchone()
+    msg = row[0]
+    print(msg)
 
 
 # function
@@ -84,10 +96,10 @@ def make_static_tmp_dir():
 
 def con_db():
     db = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        passwd="112233",
-        database="his",
+        host="203.157.118.123",
+        user="sa",
+        passwd="qazwsxedcr112233",
+        database="hos",
         port=3306
     )
     return db
@@ -161,8 +173,6 @@ def callback():
     body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
 
-    print(body)
-
     # handle webhook body
     try:
         handler.handle(body, signature)
@@ -177,35 +187,33 @@ def callback():
     return 'OK'
 
 
-@handler.add(FollowEvent)  # มีคนมา add , มีคน unblock
+@handler.add(FollowEvent)
 def handle_follow(event):
     print(event)
-    line_bot_api.reply_message(event.reply_token,[
-        TextSendMessage(text='สวัสดีจ้า...')
-    ])
 
 
-@handler.add(UnfollowEvent) #มีคน block
+@handler.add(UnfollowEvent)
 def handle_unfollow(event):
     print(event)
 
 
-@handler.add(MessageEvent, message=TextMessage) # มีคนส่งข้อความแบบ text
+@handler.add(MessageEvent, message=TextMessage)
 def handle_text_message(event):
     print(event)
+    text = event.message.text
 
 
-@handler.add(MessageEvent, message=StickerMessage)  #มีคนส่งสติกเกอร์
+@handler.add(MessageEvent, message=StickerMessage)
 def handle_sticker_message(event):
     print(event)
 
 
-@handler.add(MessageEvent, message=LocationMessage) #มีคนส่ง location
+@handler.add(MessageEvent, message=LocationMessage)
 def handle_location_message(event):
     print(event)
 
 
-@handler.add(MessageEvent, message=(ImageMessage, VideoMessage, AudioMessage)) #ส่ง multimedia
+@handler.add(MessageEvent, message=(ImageMessage, VideoMessage, AudioMessage))
 def handle_content_message(event):
     if isinstance(event.message, ImageMessage):
         ext = 'jpg'
@@ -230,7 +238,7 @@ def handle_content_message(event):
     print(url)
 
 
-@handler.add(MessageEvent, message=FileMessage) #ส่งไฟล์
+@handler.add(MessageEvent, message=FileMessage)
 def handle_file_message(event):
     message_content = line_bot_api.get_message_content(event.message.id)
     with tempfile.NamedTemporaryFile(dir=static_tmp_path, prefix='file-', delete=False) as tf:
@@ -245,22 +253,22 @@ def handle_file_message(event):
     print(url)
 
 
-@handler.add(JoinEvent)  # bot เข้ากลุ่ม
+@handler.add(JoinEvent)
 def handle_join(event):
     print(event)
 
 
-@handler.add(LeaveEvent) # bot ออกจากกลุ่ม 
+@handler.add(LeaveEvent)
 def handle_leave(event):
     print(event)
 
 
-@handler.add(PostbackEvent)  # ข้อความส่งมาแบบเบื้องหลัง
+@handler.add(PostbackEvent)
 def handle_postback(event):
     print(event)
 
 
-@handler.add(BeaconEvent)  # เข้าไปในพื้นที่ beacon
+@handler.add(BeaconEvent)
 def handle_beacon(event):
     print(event)
 
@@ -276,5 +284,7 @@ if __name__ == "__main__":
 
     # create tmp dir for download content
     make_static_tmp_dir()
+
+    test_app()
 
     app.run(debug=True, port=8000)
