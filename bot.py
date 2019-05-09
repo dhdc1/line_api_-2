@@ -237,20 +237,46 @@ def handle_text_message(event):
         ])
 
     if text == 'ที่ไหน':
+        addr = "แถวนี้น่าอยู่..."
         loc =  {
             "type": "location",
             "title": "ที่นี่แหละ",
-            "address": "แถวนี้เถือน",
-            "latitude": 16.05910807942215,
-            "longitude": 100.60372892916203
+            "address": addr,
+            "latitude": 16,
+            "longitude": 100
         }
-
         line_message_reply(event,[
             loc,
             {
                 'type':'text',
                 'text':'ก็มาดิ....'
             }
+        ])
+
+    if text == 'confirm':
+        msg = {
+            "type": "template",
+            "altText": "this is a confirm template",
+            "template": {
+                "type": "confirm",
+                "actions": [
+                    {
+                        "type": "postback",
+                        "label": "อืม",
+                        "text": "yes",
+                        "data": "data1"
+                    },
+                    {
+                        "type": "uri",
+                        "label": "ไม่",
+                        "uri": "line://nv/camera/"
+                    }
+                ],
+                "text": "มาจริงปะละ?"
+            }
+        }
+        line_message_reply(event,[
+            msg
         ])
 
 
@@ -272,7 +298,15 @@ def handle_sticker_message(event):
 @handler.add(MessageEvent, message=LocationMessage) #มีคนส่ง location
 def handle_location_message(event):
     print(event)
+    lat, lon  = event.message.latitude, event.message.longitude
+    line_message_reply(event,[
+        {
+            'type':'text',
+            'text': str(lat) +","+  str(lon)
+        }
+    ])
     
+
 
 
 @handler.add(MessageEvent, message=(ImageMessage, VideoMessage, AudioMessage)) #ส่ง multimedia
