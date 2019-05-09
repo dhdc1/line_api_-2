@@ -201,13 +201,19 @@ def handle_text_message(event):
     text = event.message.text
 
     if text == 'test':
-        line_bot_api.reply_message(event.reply_token,[
-            TextSendMessage(text='OK OK')
+        line_message_reply(event,[           
+            {
+              'type':'text',
+              'text':'ยินดีที่เป็นเพื่อนกัน...'  
+            }
         ])
 
     if text == 'จองคิว':
-        line_bot_api.reply_message(event.reply_token,[
-            TextSendMessage(text='ได้สิจ๊ะ...')
+        line_message_reply(event,[
+            {
+              'type':'text',
+              'text':'ได้เลยจ้า'  
+            }
         ])
 
     if text == 'ดีๆ':
