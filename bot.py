@@ -139,10 +139,10 @@ def regis():
 
 @app.route('/push', methods=['GET'])
 def push():
-    line_message_push(['Ude27617017e3cbf820dd9aa13b1491ca'], [
+    line_message_push(['lineid','dd',''], [
         {
             "type": "text",
-            "text": "ข้อความเสียสตางค์"
+            "text": "ข้อความเสียโควต้า message "
         }
     ])
     return 'OK'
@@ -182,7 +182,11 @@ def handle_follow(event):
     print(event)
     profile = get_user_profile(event)
     line_bot_api.reply_message(event.reply_token,[
-        TextSendMessage(text='สวัสดีจ้า...' + profile.display_name )
+        
+        #process data query in 30 sec
+        TextSendMessage(text='สวัสดีจ้า...' + profile.display_name ),
+        TextSendMessage(text='ให้ช่วยอะไรจ๊ะ...'),
+        TextSendMessage(text='บอกมาได้เลย....')
     ])
 
 
@@ -191,14 +195,48 @@ def handle_unfollow(event):
     print(event)
 
 
-@handler.add(MessageEvent, message=TextMessage) # มีคนส่งข้อความแบบ text
+@handler.add(MessageEvent, message=TextMessage) # มีคนส่งข้อความแบบ text มาหา bot
 def handle_text_message(event):
-    print(event)
+    #print(event)
+    text = event.message.text
+
+    if text == 'test':
+        line_bot_api.reply_message(event.reply_token,[
+            TextSendMessage(text='OK OK')
+        ])
+
+    if text == 'จองคิว':
+        line_bot_api.reply_message(event.reply_token,[
+            TextSendMessage(text='ได้สิจ๊ะ...')
+        ])
+
+    if text == 'ดีๆ':
+        msg1 =  {
+            "type": "sticker",
+            "packageId": "1",
+            "stickerId": "102"
+        }
+        msg2 =  {
+            "type": "sticker",
+            "packageId": "1",
+            "stickerId": "109"
+        }
+        line_message_reply(event,[
+            msg1,
+            msg2,
+            {
+              'type':'text',
+              'text':'ก็ดีเหมือนกันนะ...'  
+            }
+        ])
+
+
 
 
 @handler.add(MessageEvent, message=StickerMessage)  #มีคนส่งสติกเกอร์
 def handle_sticker_message(event):
     print(event)
+
 
 
 @handler.add(MessageEvent, message=LocationMessage) #มีคนส่ง location
