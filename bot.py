@@ -224,8 +224,8 @@ def handle_text_message(event):
         }
         msg2 =  {
             "type": "sticker",
-            "packageId": "1",
-            "stickerId": "109"
+            "packageId": "3",
+            "stickerId": "191"
         }
         line_message_reply(event,[
             msg1,
@@ -242,6 +242,13 @@ def handle_text_message(event):
 @handler.add(MessageEvent, message=StickerMessage)  #มีคนส่งสติกเกอร์
 def handle_sticker_message(event):
     print(event)
+    line_message_reply(event,[
+        {
+            "type": "sticker",
+            "packageId": event.message.package_id,
+            "stickerId": event.message.sticker_id
+        }
+    ])
 
 
 
