@@ -236,6 +236,23 @@ def handle_text_message(event):
             }
         ])
 
+    if text == 'ที่ไหน':
+        loc =  {
+            "type": "location",
+            "title": "ที่นี่แหละ",
+            "address": "แถวนี้เถือน",
+            "latitude": 16.05910807942215,
+            "longitude": 100.60372892916203
+        }
+
+        line_message_reply(event,[
+            loc,
+            {
+                'type':'text',
+                'text':'ก็มาดิ....'
+            }
+        ])
+
 
 
 
@@ -255,6 +272,7 @@ def handle_sticker_message(event):
 @handler.add(MessageEvent, message=LocationMessage) #มีคนส่ง location
 def handle_location_message(event):
     print(event)
+    
 
 
 @handler.add(MessageEvent, message=(ImageMessage, VideoMessage, AudioMessage)) #ส่ง multimedia
