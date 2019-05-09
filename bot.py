@@ -72,6 +72,37 @@ static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
 
 
 # function
+
+def is_member(event):
+    user_id = event.source.user_id    
+    if not user_id  == '00000':       
+        return False
+    else :
+        return True
+
+def liff_regis(event):
+    line_message_reply(event,[
+        {
+            "type": "template",
+            "altText": "this is a buttons template",
+            "template": {
+                "type": "buttons",
+                "actions": [
+                    {
+                        "type": "uri",
+                        "label": ">> คลิก <<",
+                        "uri": "line://app/1572556016-pjGyJe9Y"
+                    }
+                ],
+                "title": "ลงทะเบียน",
+                "text": "หากไม่ลงทะเบียนจะไม่ตอบอะไรเลย"
+            }
+        }
+    ])
+
+
+
+
 def make_static_tmp_dir():
     try:
         os.makedirs(static_tmp_path)
@@ -180,14 +211,18 @@ def callback():
 @handler.add(FollowEvent)  # มีคนมา add , มีคน unblock
 def handle_follow(event):
     print(event)
-    profile = get_user_profile(event)
-    line_bot_api.reply_message(event.reply_token,[
-        
-        #process data query in 30 sec
-        TextSendMessage(text='สวัสดีจ้า...' + profile.display_name ),
-        TextSendMessage(text='ให้ช่วยอะไรจ๊ะ...'),
-        TextSendMessage(text='บอกมาได้เลย....')
-    ])
+
+    if not is_member(event):
+        liff_regis(event)
+    else:
+        profile = get_user_profile(event)
+        line_bot_api.reply_message(event.reply_token,[
+            
+            #process data query in 30 sec
+            TextSendMessage(text='สวัสดีจ้า...' + profile.display_name ),
+            TextSendMessage(text='ให้ช่วยอะไรจ๊ะ...'),
+            TextSendMessage(text='บอกมาได้เลย....')
+        ])
 
 
 @handler.add(UnfollowEvent) #มีคน block
@@ -199,85 +234,88 @@ def handle_unfollow(event):
 def handle_text_message(event):
     #print(event)
     text = event.message.text
+    if not is_member(event):
+        liff_regis(event)
+    else:
 
-    if text == 'test':
-        line_message_reply(event,[           
-            {
-              'type':'text',
-              'text':'ยินดีที่เป็นเพื่อนกัน...'  
-            }
-        ])
-
-    if text == 'จองคิว':
-        line_message_reply(event,[
-            {
-              'type':'text',
-              'text':'ได้เลยจ้า'  
-            }
-        ])
-
-    if text == 'ดีๆ':
-        msg1 =  {
-            "type": "sticker",
-            "packageId": "1",
-            "stickerId": "102"
-        }
-        msg2 =  {
-            "type": "sticker",
-            "packageId": "3",
-            "stickerId": "191"
-        }
-        line_message_reply(event,[
-            msg1,
-            msg2,
-            {
-              'type':'text',
-              'text':'ก็ดีเหมือนกันนะ...'  
-            }
-        ])
-
-    if text == 'ที่ไหน':
-        addr = "แถวนี้น่าอยู่..."
-        loc =  {
-            "type": "location",
-            "title": "ที่นี่แหละ",
-            "address": addr,
-            "latitude": 16,
-            "longitude": 100
-        }
-        line_message_reply(event,[
-            loc,
-            {
+        if text == 'test':
+            line_message_reply(event,[           
+                {
                 'type':'text',
-                'text':'ก็มาดิ....'
-            }
-        ])
+                'text':'ยินดีที่เป็นเพื่อนกัน...'  
+                }
+            ])
 
-    if text == 'confirm':
-        msg = {
-            "type": "template",
-            "altText": "this is a confirm template",
-            "template": {
-                "type": "confirm",
-                "actions": [
-                    {
-                        "type": "postback",
-                        "label": "อืม",
-                        "text": "yes",
-                        "data": "data1"
-                    },
-                    {
-                        "type": "uri",
-                        "label": "ไม่",
-                        "uri": "line://nv/camera/"
-                    }
-                ],
-                "text": "มาจริงปะละ?"
+        if text == 'จองคิว':
+            line_message_reply(event,[
+                {
+                'type':'text',
+                'text':'ได้เลยจ้า'  
+                }
+            ])
+
+        if text == 'ดีๆ':
+            msg1 =  {
+                "type": "sticker",
+                "packageId": "1",
+                "stickerId": "102"
             }
-        }
-        line_message_reply(event,[
-            msg
-        ])
+            msg2 =  {
+                "type": "sticker",
+                "packageId": "3",
+                "stickerId": "191"
+            }
+            line_message_reply(event,[
+                msg1,
+                msg2,
+                {
+                'type':'text',
+                'text':'ก็ดีเหมือนกันนะ...'  
+                }
+            ])
+
+        if text == 'ที่ไหน':
+            addr = "แถวนี้น่าอยู่..."
+            loc =  {
+                "type": "location",
+                "title": "ที่นี่แหละ",
+                "address": addr,
+                "latitude": 16,
+                "longitude": 100
+            }
+            line_message_reply(event,[
+                loc,
+                {
+                    'type':'text',
+                    'text':'ก็มาดิ....'
+                }
+            ])
+
+        if text == 'confirm':
+            msg = {
+                "type": "template",
+                "altText": "this is a confirm template",
+                "template": {
+                    "type": "confirm",
+                    "actions": [
+                        {
+                            "type": "postback",
+                            "label": "อืม",
+                            "text": "yes",
+                            "data": "data1"
+                        },
+                        {
+                            "type": "uri",
+                            "label": "ไม่",
+                            "uri": "line://nv/camera/"
+                        }
+                    ],
+                    "text": "มาจริงปะละ?"
+                }
+            }
+            line_message_reply(event,[
+                msg
+            ])
 
 
 
@@ -299,10 +337,12 @@ def handle_sticker_message(event):
 def handle_location_message(event):
     print(event)
     lat, lon ,user_id = event.message.latitude, event.message.longitude , event.source.user_id
+    profile = get_user_profile(event)
+    user_name = profile.display_name
     line_message_reply(event,[
         {
             'type':'text',
-            'text': user_id+" , "+str(lat) +" , "+  str(lon) 
+            'text': user_name+" , "+str(lat) +" , "+  str(lon) 
         }
     ])
     
