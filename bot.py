@@ -180,8 +180,9 @@ def callback():
 @handler.add(FollowEvent)  # มีคนมา add , มีคน unblock
 def handle_follow(event):
     print(event)
+    profile = get_user_profile(event)
     line_bot_api.reply_message(event.reply_token,[
-        TextSendMessage(text='สวัสดีจ้า...')
+        TextSendMessage(text='สวัสดีจ้า...' + profile.display_name )
     ])
 
 
