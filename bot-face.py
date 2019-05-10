@@ -132,9 +132,7 @@ def handle_content_message(event):
     
     image  = 'static/tmp/' + dist_name
     if detect_face(image) :
-        url = request.host_url + 'static/tmp/' + dist_name        
-        
-        
+        url = request.host_url + 'static/tmp/' + dist_name              
         line_bot_api.reply_message(event.reply_token, [
             TextSendMessage(text='ตรวจพบใบหน้า.'),            
             ImageSendMessage(url, url)
