@@ -41,8 +41,8 @@ api_reply = "https://api.line.me/v2/bot/message/reply"
 api_push = "https://api.line.me/v2/bot/message/multicast"
 
 # เปลี่ยนเป็นของ chanel ตัวเอง
-channel_secret = "fb0fed31522e4da273fd1856ef6489a9"
-channel_access_token = "IEl91F7L1MnAuHDD3kxAYgF27xXSQJW41LpAoLMf0RjuuXNBjuN5E2uhYRHPyqcUKjRSgdwWconYrYivZLmyk/ECjXV+pNwjgQQoji+ZNs1wtUwwzkz3xMOjqbabRexZUCt2vbadhK7UwZkxBs9R+gdB04t89/1O/w1cDnyilFU="
+channel_secret = ""
+channel_access_token = ""
 
 if channel_secret is None:
     print('LINE_CHANNEL_SECRET is None.')
