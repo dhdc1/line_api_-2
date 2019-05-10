@@ -74,8 +74,7 @@ static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
 # function
 
 def is_member(event):
-
-    line_id = event.source.user_id  
+    line_id = event.source.user_id
     db = con_db()
     cursor = db.cursor()
 
@@ -83,13 +82,14 @@ def is_member(event):
     cursor.execute(sql)
     row = cursor.fetchone()
 
-    if not int(row[0]) > 0:    # ไปดึงจากฐานว่า มี user_id นี้อยู่มั้ย   
+    if not int(row[0]) > 0:  # ไปดึงจากฐานว่า มี user_id นี้อยู่มั้ย
         return False
-    else :
+    else:
         return True
 
+
 def liff_regis(event):
-    line_message_reply(event,[
+    line_message_reply(event, [
         {
             "type": "template",
             "altText": "this is a buttons template",
@@ -107,8 +107,6 @@ def liff_regis(event):
             }
         }
     ])
-
-
 
 
 def make_static_tmp_dir():
@@ -176,10 +174,9 @@ def regis():
         db = con_db()
         cursor = db.cursor()
 
-        sql = " insert into line (cid , line_id) values ('{0}','{1}') ".format(cid,line_id)
+        sql = " insert into line (cid , line_id) values ('{0}','{1}') ".format(cid, line_id)
         cursor.execute(sql)
         db.commit()
-
 
         return render_template('ok.html')
 
@@ -187,10 +184,10 @@ def regis():
 @app.route('/push', methods=['GET'])
 def push():
     users = list()
-    #loop
+    # loop
     users.append('ssssss')
     users.append('kkkk')
-    #end loop
+    # end loop
     line_message_push(users, [
         {
             "type": "text",
@@ -237,78 +234,78 @@ def handle_follow(event):
         liff_regis(event)
     else:
         profile = get_user_profile(event)
-        line_bot_api.reply_message(event.reply_token,[
-            
-            #process data query in 30 sec
-            TextSendMessage(text='สวัสดีจ้า...' + profile.display_name ),
+        line_bot_api.reply_message(event.reply_token, [
+
+            # process data query in 30 sec
+            TextSendMessage(text='สวัสดีจ้า...' + profile.display_name),
             TextSendMessage(text='ให้ช่วยอะไรจ๊ะ...'),
             TextSendMessage(text='บอกมาได้เลย....')
         ])
 
 
-@handler.add(UnfollowEvent) #มีคน block
+@handler.add(UnfollowEvent)  # มีคน block
 def handle_unfollow(event):
     print(event)
 
 
-@handler.add(MessageEvent, message=TextMessage) # มีคนส่งข้อความแบบ text มาหา bot
+@handler.add(MessageEvent, message=TextMessage)  # มีคนส่งข้อความแบบ text มาหา bot
 def handle_text_message(event):
-    #print(event)
+    # print(event)
     text = event.message.text
     if not is_member(event):
         liff_regis(event)
     else:
 
         if text == 'test':
-            line_message_reply(event,[           
+            line_message_reply(event, [
                 {
-                'type':'text',
-                'text':'ยินดีที่เป็นเพื่อนกัน...'  
+                    'type': 'text',
+                    'text': 'ยินดีที่เป็นเพื่อนกัน...'
                 }
             ])
 
         if text == 'จองคิว':
-            line_message_reply(event,[
+            line_message_reply(event, [
                 {
-                'type':'text',
-                'text':'ได้เลยจ้า'  
+                    'type': 'text',
+                    'text': 'ได้เลยจ้า'
                 }
             ])
 
         if text == 'ดีๆ':
-            msg1 =  {
+            msg1 = {
                 "type": "sticker",
                 "packageId": "1",
                 "stickerId": "102"
             }
-            msg2 =  {
+            msg2 = {
                 "type": "sticker",
                 "packageId": "3",
                 "stickerId": "191"
             }
-            line_message_reply(event,[
+            line_message_reply(event, [
                 msg1,
                 msg2,
                 {
-                'type':'text',
-                'text':'ก็ดีเหมือนกันนะ...'  
+                    'type': 'text',
+                    'text': 'ก็ดีเหมือนกันนะ...'
                 }
             ])
 
         if text == 'ที่ไหน':
             addr = "แถวนี้น่าอยู่..."
-            loc =  {
+            loc = {
                 "type": "location",
                 "title": "ที่นี่แหละ",
                 "address": addr,
                 "latitude": 16,
                 "longitude": 100
             }
-            line_message_reply(event,[
+            line_message_reply(event, [
                 loc,
                 {
-                    'type':'text',
-                    'text':'ก็มาดิ....'
+                    'type': 'text',
+                    'text': 'ก็มาดิ....'
                 }
             ])
 
@@ -334,18 +331,16 @@ def handle_text_message(event):
                     "text": "มาจริงปะละ?"
                 }
             }
-            line_message_reply(event,[
+            line_message_reply(event, [
                 msg
             ])
 
 
-
-
-@handler.add(MessageEvent, message=StickerMessage)  #มีคนส่งสติกเกอร์
+@handler.add(MessageEvent, message=StickerMessage)  # มีคนส่งสติกเกอร์
 def handle_sticker_message(event):
     print(event)
 
-    line_message_reply(event,[
+    line_message_reply(event, [
         {
             "type": "sticker",
             "packageId": event.message.package_id,
@@ -354,25 +349,22 @@ def handle_sticker_message(event):
     ])
 
 
-
-@handler.add(MessageEvent, message=LocationMessage) #มีคนส่ง location
+@handler.add(MessageEvent, message=LocationMessage)  # มีคนส่ง location
 def handle_location_message(event):
     print(event)
 
-    lat, lon ,user_id = event.message.latitude, event.message.longitude , event.source.user_id
+    lat, lon, user_id = event.message.latitude, event.message.longitude, event.source.user_id
     profile = get_user_profile(event)
     user_name = profile.display_name
-    line_message_reply(event,[
+    line_message_reply(event, [
         {
-            'type':'text',
-            'text': user_name+" , "+str(lat) +" , "+  str(lon) 
+            'type': 'text',
+            'text': user_name + " , " + str(lat) + " , " + str(lon)
         }
     ])
-    
 
 
-
-@handler.add(MessageEvent, message=(ImageMessage, VideoMessage, AudioMessage)) #ส่ง multimedia
+@handler.add(MessageEvent, message=(ImageMessage, VideoMessage, AudioMessage))  # ส่ง multimedia
 def handle_content_message(event):
     if isinstance(event.message, ImageMessage):
         ext = 'jpg'
@@ -397,7 +389,7 @@ def handle_content_message(event):
     print(url)
 
 
-@handler.add(MessageEvent, message=FileMessage) #ส่งไฟล์
+@handler.add(MessageEvent, message=FileMessage)  # ส่งไฟล์
 def handle_file_message(event):
     message_content = line_bot_api.get_message_content(event.message.id)
     with tempfile.NamedTemporaryFile(dir=static_tmp_path, prefix='file-', delete=False) as tf:
@@ -417,7 +409,7 @@ def handle_join(event):
     print(event)
 
 
-@handler.add(LeaveEvent) # bot ออกจากกลุ่ม 
+@handler.add(LeaveEvent)  # bot ออกจากกลุ่ม
 def handle_leave(event):
     print(event)
 
